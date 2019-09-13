@@ -3,6 +3,7 @@ import pandas as pd
 import glob
 import sklearn.preprocessing
 import keras
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 import tensorflow as tf
 from dynamic_net import dynamic_net
 from augmentations import full_augment
@@ -15,6 +16,8 @@ freq_suffices = ["_8Hz", "_14Hz", "_28Hz"]
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 sess = tf.Session(config=config)
+
+np.random.seed(0)
 
 
 def pre_cut(recording, cut_start, cut_length):
