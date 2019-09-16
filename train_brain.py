@@ -3,6 +3,7 @@ import pandas as pd
 import glob
 import sklearn.preprocessing
 import keras
+import gc
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 import tensorflow as tf
 from dynamic_net import dynamic_net
@@ -12,11 +13,9 @@ from sklearn.model_selection import StratifiedKFold
 
 freq_suffices = ["_8Hz", "_14Hz", "_28Hz"]
 
-
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
-sess = tf.Session(config=config)
-
+session = tf.Session(config=config)
 np.random.seed(0)
 
 
@@ -57,7 +56,7 @@ def load_data(data_dir, pre_cut_start, pre_cut_length):
 
 
 def train(x_train, y_train, model):
-    model.fit(x_train, y_train, shuffle=True, epochs=100, batch_size=5, verbose = 0)
+    model.fit(x_train, y_train, shuffle=True, epochs=100, batch_size=10, verbose = 0)
 
 
 def test(x_test, y_test, model):
@@ -74,29 +73,46 @@ def init_data(train_data_dir, test_data_dir, multiplier):
     return x_train_aug, y_train_aug, my_x_test, my_y_test
 
 
+def write_log_params(filepath, params):
+    file_stream = open(filepath,"a+")
+    file_stream.write("\nGenes: ")
+    file_stream.write(str(params))
+    file_stream.close()
+
+def write_log_metrics(filepath, loss, acc):
+    file_stream = open(filepath,"a+")
+    file_stream.write("\nClassification Loss ")
+    file_stream.write(loss)
+    file_stream.write("\nClassification Accuracy ")
+    file_stream.write(acc)
+    file_stream.close()
+
 def train_test_individual(params, x_train, y_train, x_test, y_test):
     lr = 0.0001
     feature_size = int(round(params[0]*50+2))
     conv_layer_count = int(round(params[1] * 5))
-    kernel_size = int(round(params[2] * 5 + 1))
+    kernel_size = int(round(params[2] * 2 + 1))
     dilation_rate = int(round(params[3] * 12 + 1))
     dropout = params[4] * 0.5
+    filepath = "run.txt"
 
     my_params = {"lr": lr, "feature_size": feature_size, "conv_layer_count": conv_layer_count, "kernel_size": kernel_size,
                  "dilation_rate": dilation_rate, "dropout": dropout}
 
+    write_log_params(filepath, my_params)
     print("Genes:")
     print(my_params)
     my_dynamic_net = dynamic_net(my_params)
     train(x_train, y_train, my_dynamic_net)
-    
-    
+
     classification_loss = test(x_test, y_test, my_dynamic_net)[0]
     classification_acc = test(x_test, y_test, my_dynamic_net)[1]
 
     print("Classification Loss " + str(classification_loss))
     print("Classification Accuracy " + str(classification_acc))
     
+    write_log_metrics(filepath, str(classification_loss), str(classification_acc))
+
     train_accuracy = test(x_train, y_train, my_dynamic_net)[1]
     
     if train_accuracy < 0.7:
@@ -104,4 +120,7 @@ def train_test_individual(params, x_train, y_train, x_test, y_test):
         print("Training failed")
 
     keras.backend.clear_session()
+    gc.collect()
+    del my_dynamic_net
+
     return classification_loss
