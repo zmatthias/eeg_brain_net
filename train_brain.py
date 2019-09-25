@@ -10,7 +10,6 @@ from dynamic_net import dynamic_net
 from augmentations import full_augment
 from sklearn.model_selection import StratifiedKFold
 
-
 freq_suffices = ["_8Hz", "_14Hz", "_28Hz"]
 
 config = tf.ConfigProto()
@@ -87,13 +86,14 @@ def write_log_metrics(filepath, loss, acc):
     file_stream.write(acc)
     file_stream.close()
 
+
 def train_test_individual(params, x_train, y_train, x_test, y_test):
     lr = 0.0001
-    feature_size = int(round(params[0]*50+2))
-    conv_layer_count = int(round(params[1] * 5))
-    kernel_size = int(round(params[2] * 2 + 1))
-    dilation_rate = int(round(params[3] * 12 + 1))
-    dropout = params[4] * 0.5
+    feature_size = int(np.maximum(round(params[0]), 1))
+    conv_layer_count = int(np.maximum(round(params[1]), 1))
+    kernel_size = int(np.maximum(round(params[2]), 1))
+    dilation_rate = int(np.maximum(round(params[3]), 1))
+    dropout = params[4]
     filepath = "run.txt"
 
     my_params = {"lr": lr, "feature_size": feature_size, "conv_layer_count": conv_layer_count, "kernel_size": kernel_size,

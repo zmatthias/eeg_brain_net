@@ -25,17 +25,20 @@ def add_loss(unrated_individual: np.ndarray) -> np.ndarray:
     return rated_individual
 
 
-def create_rated_individual(gene_count) -> np.ndarray:
-    individual = np.random.rand(gene_count)
+def create_rated_individual(gene_count, gene_ranges: np.ndarray) -> np.ndarray:
+    individual = np.empty(gene_count)
+    for i in range(0, gene_count):
+        individual[i] = np.random.uniform(gene_ranges[i][0], gene_ranges[i][1])
+
     rated_individual = add_loss(individual)
     return rated_individual
 
 
 # rated population is already sorted , but sorting again is still required when adding new individuals
-def create_rated_population(population_count: int, gene_count: int) -> np.ndarray:
+def create_rated_population(population_count: int, gene_count: int, gene_ranges: np.ndarray) -> np.ndarray:
     population = np.empty((0, gene_count + 1))
     for i in range(population_count):
-        individual = create_rated_individual(gene_count)
+        individual = create_rated_individual(gene_count, gene_ranges)
         population = np.vstack([population, individual])
 
     sorted_population = population[population[:, gene_count].argsort()]
@@ -114,12 +117,19 @@ if __name__ == '__main__':
     test_data_dir = "data/test_data"
     aug_multiplier = 2
 
-    x_train, y_train, x_test, y_test = train_brain.init_data(train_data_dir,test_data_dir,aug_multiplier)
+    my_gene_ranges = np.array([[1, 50],  # feature_size
+                                [1, 6],   # conv_layer_count
+                                [1, 5],   # kernel_size
+                                [1, 20],  # dilation_rate
+                                [0.0, 0.8]])  # dropout
 
-    my_initial_population = create_rated_population(population_size, my_gene_count)
+    x_train, y_train, x_test, y_test = train_brain.init_data(train_data_dir, test_data_dir, aug_multiplier)
+
+    my_initial_population = create_rated_population(population_size, my_gene_count, my_gene_ranges)
     besties = get_best_individuals(my_initial_population, my_parent_count)
 
     for e in range(epochs):
+        print("====== Evolution Epoch: " + str(e) + "==============")
         my_children = make_rated_children(besties, my_children_count)
         besties = get_best_individuals(my_children, my_parent_count)
         print(besties[0][-1])
