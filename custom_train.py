@@ -4,7 +4,7 @@ if __name__ == '__main__':
 
 	train_data_dir = "data/training_data"
 	test_data_dir = "data/test_data"
-	aug_multiplier = 1
+	aug_multiplier = 3
 
 	custom_config = [2,  # feature_size
 					 2,  # conv_layer_count
