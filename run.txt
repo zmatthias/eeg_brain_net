@@ -128,3 +128,26 @@ Genes: {'lr': 0.0001, 'feature_size': 8, 'conv_layer_count': 3, 'kernel_size': 2
 Classification Loss 1.444961667060852
 Classification Accuracy 0.4166666567325592
 Genes: {'lr': 0.0001, 'feature_size': 17, 'conv_layer_count': 0, 'kernel_size': 2, 'dilation_rate': 1, 'dropout': 0.1750503302326512}
+Genes: {'lr': 0.0001, 'feature_size': 8, 'conv_layer_count': 3, 'kernel_size': 2, 'dilation_rate': 2, 'dropout': 0.352168099667193}
+Genes: {'lr': 0.0001, 'feature_size': 8, 'conv_layer_count': 3, 'kernel_size': 2, 'dilation_rate': 2, 'dropout': 0.352168099667193}
+Genes: {'lr': 0.0001, 'feature_size': 102, 'conv_layer_count': 10, 'kernel_size': 5, 'dilation_rate': 13, 'dropout': 0.5}
+Genes: {'lr': 0.0001, 'feature_size': 102, 'conv_layer_count': 10, 'kernel_size': 5, 'dilation_rate': 13, 'dropout': 0.5}
+Genes: {'lr': 0.0001, 'feature_size': 102, 'conv_layer_count': 10, 'kernel_size': 5, 'dilation_rate': 13, 'dropout': 0.5}
+Genes: {'kernel_size': 5, 'feature_size': 102, 'lr': 0.0001, 'dilation_rate': 13, 'conv_layer_count': 10, 'dropout': 0.5}
+Genes: {'conv_layer_count': 10, 'kernel_size': 5, 'lr': 0.0001, 'feature_size': 102, 'dilation_rate': 13, 'dropout': 0.5}
+Genes: {'dilation_rate': 13, 'dropout': 0.5, 'kernel_size': 5, 'lr': 0.0001, 'feature_size': 102, 'conv_layer_count': 10}
+Genes: {'lr': 0.0001, 'conv_layer_count': 10, 'dilation_rate': 13, 'feature_size': 102, 'kernel_size': 5, 'dropout': 0.5}
+Genes: {'feature_size': 102, 'conv_layer_count': 10, 'lr': 0.0001, 'dropout': 0.5, 'kernel_size': 5, 'dilation_rate': 13}
+Genes: {'lr': 0.0001, 'feature_size': 1, 'conv_layer_count': 1, 'dropout': 1, 'dilation_rate': 1, 'kernel_size': 1}
+Genes: {'lr': 0.0001, 'dropout': 1, 'feature_size': 1, 'conv_layer_count': 1, 'kernel_size': 1, 'dilation_rate': 1}
+Genes: {'kernel_size': 1, 'feature_size': 1, 'dropout': 1, 'conv_layer_count': 1, 'dilation_rate': 1, 'lr': 0.0001}
+Genes: {'dilation_rate': 1, 'lr': 0.0001, 'conv_layer_count': 2, 'feature_size': 2, 'kernel_size': 2, 'dropout': 1}
+Genes: {'lr': 0.0001, 'conv_layer_count': 4, 'dilation_rate': 2, 'feature_size': 7, 'kernel_size': 2, 'dropout': 0.000704336199334386}
+Genes: {'conv_layer_count': 4, 'dilation_rate': 2, 'feature_size': 7, 'dropout': 0.5634689594675087, 'kernel_size': 2, 'lr': 0.0001}
+Genes: {'feature_size': 2, 'dropout': 1, 'dilation_rate': 1, 'conv_layer_count': 2, 'kernel_size': 2, 'lr': 0.0001}
+Genes: {'conv_layer_count': 2, 'dropout': 1, 'lr': 0.0001, 'kernel_size': 2, 'feature_size': 2, 'dilation_rate': 1}
+Genes: {'dilation_rate': 1, 'dropout': 1, 'lr': 0.0001, 'kernel_size': 2, 'conv_layer_count': 2, 'feature_size': 2}
+Genes: {'lr': 0.0001, 'conv_layer_count': 2, 'dropout': 1, 'kernel_size': 2, 'dilation_rate': 1, 'feature_size': 2}
+Genes: {'dilation_rate': 2, 'kernel_size': 2, 'dropout': 0.5634689594675087, 'conv_layer_count': 4, 'feature_size': 7, 'lr': 0.0001}
+Genes: {'dilation_rate': 2, 'kernel_size': 2, 'dropout': 0.5634689594675087, 'feature_size': 7, 'lr': 0.0001, 'conv_layer_count': 4}
+Genes: {'lr': 0.0001, 'feature_size': 7, 'dropout': 0.5634689594675087, 'kernel_size': 2, 'conv_layer_count': 4, 'dilation_rate': 2}

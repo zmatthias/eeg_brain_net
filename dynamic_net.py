@@ -14,8 +14,8 @@ def dynamic_net(params: Dict):
     model.add(Flatten())
     model.add(Dense(256, activation='relu'))
     model.add(Dropout(params['dropout']))
-    model.add(Dense(256, activation='relu'))
-    model.add(Dropout(params['dropout']))
+    #model.add(Dense(256, activation='relu'))
+    #model.add(Dropout(params['dropout']))
 
     model.add(Dense(3, activation='softmax'))
 

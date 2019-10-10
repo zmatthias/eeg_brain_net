@@ -55,7 +55,7 @@ def load_data(data_dir, pre_cut_start, pre_cut_length):
 
 
 def train(x_train, y_train, model):
-    model.fit(x_train, y_train, shuffle=True, epochs=100, batch_size=10, verbose = 0)
+    model.fit(x_train, y_train, shuffle=True, epochs=100, batch_size=1, validation_split=0.2, verbose=1)
 
 
 def test(x_test, y_test, model):
@@ -78,6 +78,7 @@ def write_log_params(filepath, params):
     file_stream.write(str(params))
     file_stream.close()
 
+
 def write_log_metrics(filepath, loss, acc):
     file_stream = open(filepath,"a+")
     file_stream.write("\nClassification Loss ")
@@ -94,7 +95,7 @@ def train_test_individual(params, x_train, y_train, x_test, y_test):
     kernel_size = int(np.maximum(round(params[2]), 1))
     dilation_rate = int(np.maximum(round(params[3]), 1))
     dropout = params[4]
-    filepath = "run.txt"
+    filepath = "run_log.txt"
 
     my_params = {"lr": lr, "feature_size": feature_size, "conv_layer_count": conv_layer_count, "kernel_size": kernel_size,
                  "dilation_rate": dilation_rate, "dropout": dropout}
@@ -112,12 +113,6 @@ def train_test_individual(params, x_train, y_train, x_test, y_test):
     print("Classification Accuracy " + str(classification_acc))
     
     write_log_metrics(filepath, str(classification_loss), str(classification_acc))
-
-    train_accuracy = test(x_train, y_train, my_dynamic_net)[1]
-    
-    if train_accuracy < 0.7:
-        classification_loss = 99
-        print("Training failed")
 
     keras.backend.clear_session()
     gc.collect()
