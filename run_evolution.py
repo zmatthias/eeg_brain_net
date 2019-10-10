@@ -15,7 +15,7 @@ def mock_rate_loss(individual) -> float:
 
 
 def rate_loss(individual) -> float:
-    loss = train_test_individual.train_test_individual(individual, x_train, y_train, x_test, y_test)
+    loss = train_test_individual.train_test_individual(individual, config_train_test, x_train, y_train, x_test, y_test)
     return loss
 
 
@@ -65,7 +65,6 @@ def combine_genes_avg(genes: np.ndarray) -> int:
     parent_count = len(genes)  # each gene is from a different parent
     for gene in genes:
         gene_result += gene / parent_count
-    #gene_result = round(gene_result)
     return gene_result
 
 
@@ -109,21 +108,34 @@ def make_rated_children(parents: np.ndarray, count: int) -> np.ndarray:
 if __name__ == '__main__':
     epochs = 50
     population_size = 500
-    my_gene_count = 5
+    my_gene_count = 6
     my_parent_count = 5
     my_children_count = 30
 
-    train_data_dir = "data/training_data"
-    test_data_dir = "data/test_data"
-    aug_multiplier = 2
-
-    my_gene_ranges = np.array([[1, 50],  # feature_size
+    my_gene_ranges = np.array([[0.00001, 0.001],  # learning rate
+                                [1, 50],  # feature_size
                                 [1, 6],   # conv_layer_count
                                 [1, 5],   # kernel_size
                                 [1, 20],  # dilation_rate
                                 [0.0, 0.8]])  # dropout
 
-    x_train, y_train, x_test, y_test = init_data.init_data(train_data_dir, test_data_dir, aug_multiplier)
+    config_data = {"train_data_dir": "data/training_data",
+                   "test_data_dir": "data/test_data",
+                   "train_cut_start": 0,
+                   "train_cut_length": 6000,
+                   "test_cut_start": 1000,
+                   "test_cut_length": 5000,
+                   "aug_multiplier": 3}
+
+    config_train_test = {"train_epochs": 6,
+                         "train_batch_size": 5,
+                         "test_batch_size": 48,
+                         "log_file_path": "run_log.txt",
+                         "fold_count": 5,
+                         "train_verbose": 1}
+
+
+    x_train, y_train, x_test, y_test = init_data.init_data(config_data)
 
     my_initial_population = create_rated_population(population_size, my_gene_count, my_gene_ranges)
     besties = get_best_individuals(my_initial_population, my_parent_count)
