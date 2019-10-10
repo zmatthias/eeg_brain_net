@@ -1,6 +1,6 @@
 import numpy as np
-import train_brain
-
+import train_test_individual
+import init_data
 # rated individual: [gene_a, gene_b,..., classification loss]
 # rated population: [rated individual 0, rated individual 1, ..]
 
@@ -15,7 +15,7 @@ def mock_rate_loss(individual) -> float:
 
 
 def rate_loss(individual) -> float:
-    loss = train_brain.train_test_individual(individual, x_train, y_train, x_test, y_test)
+    loss = train_test_individual.train_test_individual(individual, x_train, y_train, x_test, y_test)
     return loss
 
 
@@ -123,7 +123,7 @@ if __name__ == '__main__':
                                 [1, 20],  # dilation_rate
                                 [0.0, 0.8]])  # dropout
 
-    x_train, y_train, x_test, y_test = train_brain.init_data(train_data_dir, test_data_dir, aug_multiplier)
+    x_train, y_train, x_test, y_test = init_data.init_data(train_data_dir, test_data_dir, aug_multiplier)
 
     my_initial_population = create_rated_population(population_size, my_gene_count, my_gene_ranges)
     besties = get_best_individuals(my_initial_population, my_parent_count)

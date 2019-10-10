@@ -54,3 +54,9 @@ Test Loss, Acc: [1.08856356 0.33333334]
 Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
  
 Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
