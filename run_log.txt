@@ -42,3 +42,15 @@ Test Loss, Acc: [1.08847463 0.33333334]
 Genes: {'conv_layer_count': 2, 'dilation_rate': 1, 'kernel_size': 2, 'dropout': 1, 'feature_size': 2, 'lr': 0.0001}
 Validation Loss, Acc: [1.16945553 0.37037036]
 Test Loss, Acc: [1.09204495 0.33333334]
+ 
+Genes: OrderedDict([('dilation_rate', 1), ('lr', 0.0001), ('conv_layer_count', 2), ('dropout', 1), ('kernel_size', 2), ('feature_size', 2)])
+Validation Loss, Acc: [1.17026317 0.37037036]
+Test Loss, Acc: [1.09219921 0.25      ]
+ 
+Genes: OrderedDict([('kernel_size', 2), ('conv_layer_count', 2), ('dropout', 1), ('dilation_rate', 1), ('lr', 0.0001), ('feature_size', 2)])
+Validation Loss, Acc: [1.16873765 0.37037036]
+Test Loss, Acc: [1.08856356 0.33333334]
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])

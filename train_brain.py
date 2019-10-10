@@ -9,6 +9,7 @@ import tensorflow as tf
 from dynamic_net import dynamic_net
 from augmentations import full_augment
 from sklearn.model_selection import StratifiedKFold
+from collections import OrderedDict
 
 freq_suffices = ["_8Hz", "_14Hz", "_28Hz"]
 
@@ -105,8 +106,8 @@ def train_test_individual(params, x_train, y_train, x_test, y_test):
     dropout = params[4]
     file_path = "run_log.txt"
 
-    my_params = {"lr": lr, "feature_size": feature_size, "conv_layer_count": conv_layer_count, "kernel_size": kernel_size,
-                 "dilation_rate": dilation_rate, "dropout": dropout}
+    my_params = OrderedDict([("lr", lr), ("feature_size", feature_size), ("conv_layer_count", conv_layer_count),
+                             ("kernel_size", kernel_size), ("dilation_rate", dilation_rate), ("dropout", dropout)])
 
     write_log_params(file_path, my_params)
     print("Genes:")
