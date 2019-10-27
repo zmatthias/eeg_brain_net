@@ -123,7 +123,7 @@ def main():
                    "train_cut_length": 6000,
                    "test_cut_start": 1000,
                    "test_cut_length": 5000,
-                   "aug_multiplier": 5}
+                   "aug_multiplier": 2}
 
     train_test_config = {"train_epochs": 1000,
                          "train_batch_size": 200,
