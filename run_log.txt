@@ -1,70 +1,29 @@
 
-Genes: {'lr': 0.0001, 'conv_layer_count': 2, 'dilation_rate': 1, 'feature_size': 2, 'kernel_size': 2, 'dropout': 1}
-Genes: {'kernel_size': 2, 'feature_size': 2, 'conv_layer_count': 2, 'dropout': 1, 'dilation_rate': 1, 'lr': 0.0001}
-Genes: {'feature_size': 2, 'lr': 0.0001, 'conv_layer_count': 2, 'dilation_rate': 1, 'dropout': 1, 'kernel_size': 2}
-Genes: {'dilation_rate': 1, 'feature_size': 2, 'dropout': 1, 'lr': 0.0001, 'conv_layer_count': 2, 'kernel_size': 2}
-Genes: {'lr': 0.0001, 'conv_layer_count': 2, 'feature_size': 2, 'dropout': 1, 'dilation_rate': 1, 'kernel_size': 2}
-Genes: {'conv_layer_count': 2, 'dropout': 1, 'lr': 0.0001, 'kernel_size': 2, 'dilation_rate': 1, 'feature_size': 2}
-Genes: {'dilation_rate': 1, 'dropout': 1, 'feature_size': 2, 'conv_layer_count': 2, 'lr': 0.0001, 'kernel_size': 2}
-Genes: {'kernel_size': 2, 'conv_layer_count': 2, 'dilation_rate': 1, 'feature_size': 2, 'lr': 0.0001, 'dropout': 1}
-Genes: {'dropout': 1, 'lr': 0.0001, 'feature_size': 2, 'kernel_size': 2, 'conv_layer_count': 2, 'dilation_rate': 1}
-Genes: {'dilation_rate': 1, 'feature_size': 2, 'conv_layer_count': 2, 'dropout': 1, 'lr': 0.0001, 'kernel_size': 2}
-Genes: {'conv_layer_count': 2, 'lr': 0.0001, 'kernel_size': 2, 'dilation_rate': 1, 'dropout': 1, 'feature_size': 2}
-Genes: {'dropout': 1, 'kernel_size': 2, 'lr': 0.0001, 'feature_size': 2, 'dilation_rate': 1, 'conv_layer_count': 2}
-Genes: {'dropout': 1, 'lr': 0.0001, 'conv_layer_count': 2, 'kernel_size': 2, 'dilation_rate': 1, 'feature_size': 2}
-Genes: {'dilation_rate': 1, 'lr': 0.0001, 'kernel_size': 2, 'feature_size': 2, 'dropout': 1, 'conv_layer_count': 2}
-Genes: {'conv_layer_count': 2, 'feature_size': 2, 'kernel_size': 2, 'dropout': 1, 'lr': 0.0001, 'dilation_rate': 1}
-Genes: {'feature_size': 2, 'conv_layer_count': 2, 'dilation_rate': 1, 'dropout': 1, 'lr': 0.0001, 'kernel_size': 2}
-Genes: {'kernel_size': 2, 'lr': 0.0001, 'dropout': 1, 'conv_layer_count': 2, 'feature_size': 2, 'dilation_rate': 1}
-Genes: {'dropout': 1, 'lr': 0.0001, 'dilation_rate': 1, 'conv_layer_count': 2, 'feature_size': 2, 'kernel_size': 2}
-Genes: {'dropout': 1, 'feature_size': 2, 'kernel_size': 2, 'conv_layer_count': 2, 'lr': 0.0001, 'dilation_rate': 1}
-Genes: {'lr': 0.0001, 'dilation_rate': 1, 'conv_layer_count': 2, 'kernel_size': 2, 'dropout': 1, 'feature_size': 2}
-Genes: {'kernel_size': 2, 'feature_size': 2, 'dilation_rate': 1, 'dropout': 1, 'lr': 0.0001, 'conv_layer_count': 2}
-Genes: {'conv_layer_count': 2, 'dilation_rate': 1, 'kernel_size': 2, 'lr': 0.0001, 'dropout': 1, 'feature_size': 2}
-Genes: {'lr': 0.0001, 'conv_layer_count': 2, 'kernel_size': 2, 'dropout': 1, 'feature_size': 2, 'dilation_rate': 1}
-Genes: {'conv_layer_count': 2, 'feature_size': 2, 'dilation_rate': 1, 'kernel_size': 2, 'lr': 0.0001, 'dropout': 1}
-Genes: {'feature_size': 2, 'kernel_size': 2, 'conv_layer_count': 2, 'dilation_rate': 1, 'lr': 0.0001, 'dropout': 1}
-Genes: {'dropout': 1, 'kernel_size': 2, 'feature_size': 2, 'dilation_rate': 1, 'lr': 0.0001, 'conv_layer_count': 2}
-Genes: {'feature_size': 2, 'dropout': 1, 'kernel_size': 2, 'dilation_rate': 1, 'conv_layer_count': 2, 'lr': 0.0001}
-Genes: {'kernel_size': 2, 'lr': 0.0001, 'conv_layer_count': 2, 'feature_size': 2, 'dropout': 1, 'dilation_rate': 1}
-Genes: {'dilation_rate': 1, 'dropout': 1, 'lr': 0.0001, 'feature_size': 2, 'kernel_size': 2, 'conv_layer_count': 2}
-Genes: {'lr': 0.0001, 'dilation_rate': 1, 'conv_layer_count': 2, 'feature_size': 2, 'kernel_size': 2, 'dropout': 1}
-Genes: {'feature_size': 2, 'kernel_size': 2, 'dilation_rate': 1, 'lr': 0.0001, 'conv_layer_count': 2, 'dropout': 1}
-Genes: {'conv_layer_count': 2, 'lr': 0.0001, 'dropout': 1, 'dilation_rate': 1, 'kernel_size': 2, 'feature_size': 2}
-Genes: {'lr': 0.0001, 'dilation_rate': 1, 'kernel_size': 2, 'conv_layer_count': 2, 'dropout': 1, 'feature_size': 2}
-Genes: {'conv_layer_count': 2, 'lr': 0.0001, 'kernel_size': 2, 'dilation_rate': 1, 'feature_size': 2, 'dropout': 1}
-Validation Loss, Acc: [1.1741221  0.33333334]
-Test Loss, Acc: [1.09158885 0.25      ]
-Genes: {'conv_layer_count': 2, 'lr': 0.0001, 'feature_size': 2, 'dilation_rate': 1, 'dropout': 1, 'kernel_size': 2}
-Validation Loss, Acc: [1.17025101 0.37037036]
-Test Loss, Acc: [1.08847463 0.33333334]
- 
-Genes: {'conv_layer_count': 2, 'dilation_rate': 1, 'kernel_size': 2, 'dropout': 1, 'feature_size': 2, 'lr': 0.0001}
-Validation Loss, Acc: [1.16945553 0.37037036]
-Test Loss, Acc: [1.09204495 0.33333334]
- 
-Genes: OrderedDict([('dilation_rate', 1), ('lr', 0.0001), ('conv_layer_count', 2), ('dropout', 1), ('kernel_size', 2), ('feature_size', 2)])
-Validation Loss, Acc: [1.17026317 0.37037036]
-Test Loss, Acc: [1.09219921 0.25      ]
- 
-Genes: OrderedDict([('kernel_size', 2), ('conv_layer_count', 2), ('dropout', 1), ('dilation_rate', 1), ('lr', 0.0001), ('feature_size', 2)])
-Validation Loss, Acc: [1.16873765 0.37037036]
-Test Loss, Acc: [1.08856356 0.33333334]
- 
-Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
- 
-Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
- 
-Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
- 
-Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
- 
-Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 1)])
  
 Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
  
 Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
-Validation Loss, Acc: [1.12747195 0.36814815]
-Test Loss, Acc: [1.15947537 0.30000001]
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
  
 Genes: OrderedDict([('lr', 0.0004715838340757466), ('feature_size', 9), ('conv_layer_count', 2), ('kernel_size', 4), ('dilation_rate', 1), ('dropout', 0.5777704106859252)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
+ 
+Genes: OrderedDict([('lr', 0.0001), ('feature_size', 2), ('conv_layer_count', 2), ('kernel_size', 2), ('dilation_rate', 1), ('dropout', 0.1)])
+Validation Loss, Acc: [1.12903732 0.39583333]
+Test Loss, Acc: [1.3759614  0.43333333]

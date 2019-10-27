@@ -14,11 +14,17 @@ tf_config = tf.ConfigProto()
 tf_config.gpu_options.allow_growth = True
 tf.Session(config=tf_config)
 np.random.seed(0)
+checkpoint_path = "model.h5"
 
 
 def train(x_train, y_train, model, conf):
+    keras_callbacks = [
+        EarlyStopping(monitor='val_loss', patience=5, mode='min', min_delta=0.0001),
+        ModelCheckpoint(checkpoint_path, monitor='val_loss', save_best_only=True, mode='min')
+    ]
+    # other validation here than k-fold
     model.fit(x_train, y_train, shuffle=True, epochs=conf["train_epochs"], batch_size=conf["train_batch_size"],
-              verbose=conf["train_verbose"])
+              verbose=conf["train_verbose"], validation_split=0.2, callbacks=keras_callbacks)
 
 
 def test(x_test, y_test, model, conf):
@@ -74,7 +80,7 @@ def train_test_individual(genes, conf, data):  # x_test means actual test, not v
     val_scores_sum, test_scores_sum = np.zeros(2), np.zeros(2)
 
     for train_index, val_index in skf.split(data["x_train"], data["y_train"].argmax(1)):  # convert one-hot to integer values to split
-        print("TRAIN SET:", train_index, "VAL SET:", val_index)
+        # print("TRAIN SET:", train_index, "VAL SET:", val_index)
         x_train_piece, x_val_piece = data["x_train"][train_index], data["x_train"][val_index]
         y_train_piece, y_val_piece = data["y_train"][train_index], data["y_train"][val_index]
 

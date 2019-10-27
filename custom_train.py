@@ -18,8 +18,8 @@ if __name__ == '__main__':
 						"test_cut_length": 5000,
 						"aug_multiplier": 10}
 
-	train_test_config = {"train_epochs": 6,
-						 "train_batch_size": 5,
+	train_test_config = {"train_epochs": 1000,
+						 "train_batch_size": 100,
 						 "test_batch_size": 48,
 						 "log_file_path": "run_log.txt",
 						 "fold_count": 5,

@@ -87,7 +87,7 @@ def combine_genes_rand_weight(genes: np.ndarray) -> int:
     return gene_result
 
 
-def make_rated_children(parents: np.ndarray, count: int) -> np.ndarray:
+def make_rated_children(parents: np.ndarray, count: int, train_test_config, train_test_data) -> np.ndarray:
     gene_count = parents.shape[1] - 1  # subtract fitness score
     child = np.zeros(gene_count)
     children = np.empty((0, parents.shape[1]))
@@ -96,18 +96,18 @@ def make_rated_children(parents: np.ndarray, count: int) -> np.ndarray:
         for gene in range(gene_count):
             child[gene] = combine_genes_rand_weight(parents[:, [gene]])
 
-        rated_child = add_loss(child)
+        rated_child = add_loss(child, train_test_config, train_test_data)
         children = np.vstack([children, rated_child])
 
     return children
 
 
 def main():
-    epochs = 3
-    population_size = 50
+    epochs = 2
+    population_size = 10
     my_gene_count = 6
-    my_parent_count = 4
-    my_children_count = 15
+    my_parent_count = 3
+    my_children_count = 5
 
     my_gene_ranges = np.array([[0.00001, 0.001],  # learning rate
                                 [1, 50],  # feature_size
@@ -122,10 +122,10 @@ def main():
                    "train_cut_length": 6000,
                    "test_cut_start": 1000,
                    "test_cut_length": 5000,
-                   "aug_multiplier": 3}
+                   "aug_multiplier": 2}
 
-    train_test_config = {"train_epochs": 50,
-                         "train_batch_size": 50,
+    train_test_config = {"train_epochs": 30,
+                         "train_batch_size": 100,
                          "test_batch_size": 48,
                          "log_file_path": "run_log.txt",
                          "fold_count": 5,
@@ -140,7 +140,7 @@ def main():
 
     for e in range(epochs):
         print("====== Evolution Epoch: " + str(e) + "==============")
-        my_children = make_rated_children(besties, my_children_count)
+        my_children = make_rated_children(besties, my_children_count, train_test_config, train_test_data)
         besties = get_best_individuals(my_children, my_parent_count)
         print(besties[0][-1])
 
