@@ -62,7 +62,7 @@ def interpret(genes):
     return labeled_genes
 
 
-def train_test_individual(genes, conf, x_train, y_train, x_test, y_test):  # x_test means actual test, not val
+def train_test_individual(genes, conf, data):  # x_test means actual test, not val
 
     labeled_genes = interpret(genes)
     file_path = conf["log_file_path"]
@@ -72,16 +72,17 @@ def train_test_individual(genes, conf, x_train, y_train, x_test, y_test):  # x_t
 
     skf = StratifiedKFold(n_splits=conf["fold_count"], shuffle=True, random_state=42)
     val_scores_sum, test_scores_sum = np.zeros(2), np.zeros(2)
-    for train_index, val_index in skf.split(x_train, y_train.argmax(1)):  # convert one-hot to integer values to split
+
+    for train_index, val_index in skf.split(data["x_train"], data["y_train"].argmax(1)):  # convert one-hot to integer values to split
         print("TRAIN SET:", train_index, "VAL SET:", val_index)
-        x_train_piece, x_val_piece = x_train[train_index], x_train[val_index]
-        y_train_piece, y_val_piece = y_train[train_index], y_train[val_index]
+        x_train_piece, x_val_piece = data["x_train"][train_index], data["x_train"][val_index]
+        y_train_piece, y_val_piece = data["y_train"][train_index], data["y_train"][val_index]
 
         my_dynamic_net = dynamic_net(labeled_genes)
         train(x_train_piece, y_train_piece, my_dynamic_net, conf)
 
         val_scores_sum += test(x_val_piece, y_val_piece, my_dynamic_net, conf)
-        test_scores_sum += test(x_test, y_test, my_dynamic_net, conf)
+        test_scores_sum += test(data["x_test"], data["y_test"], my_dynamic_net, conf)
         del my_dynamic_net
 
     val_score_avg = val_scores_sum / skf.get_n_splits()

@@ -54,4 +54,5 @@ def init_data(conf):
                                cut_start=conf["test_cut_start"],
                                cut_length=conf["test_cut_length"])
 
-    return x_train_aug, y_train_aug, x_test, y_test
+    train_test_data = {"x_train": x_train_aug, "y_train": y_train_aug, "x_test": x_test, "y_test": y_test}
+    return train_test_data

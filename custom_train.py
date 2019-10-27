@@ -25,5 +25,5 @@ if __name__ == '__main__':
 						 "fold_count": 5,
 						 "train_verbose": 1}
 
-	x_train, y_train, x_test, y_test = init_data.init_data(data_config)
-	train_test_individual.train_test_individual(custom_genes, train_test_config, x_train, y_train, x_test, y_test)
+	train_test_data = init_data.init_data(data_config)
+	train_test_individual.train_test_individual(custom_genes, train_test_config, train_test_data)
