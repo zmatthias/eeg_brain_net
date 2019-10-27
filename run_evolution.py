@@ -105,13 +105,14 @@ def make_rated_children(parents: np.ndarray, count: int, train_test_config, trai
 def main():
     epochs = 2
     population_size = 10
-    my_gene_count = 6
+    my_gene_count = 7
     my_parent_count = 3
     my_children_count = 5
 
-    my_gene_ranges = np.array([[0.00001, 0.001],  # learning rate
+    my_gene_ranges = np.array([[0.00001, 0.01],  # learning rate
                                 [1, 50],  # feature_size
                                 [1, 6],   # conv_layer_count
+                                [1, 3],   # fc_layer_count
                                 [1, 5],   # kernel_size
                                 [1, 20],  # dilation_rate
                                 [0.0, 0.8]])  # dropout

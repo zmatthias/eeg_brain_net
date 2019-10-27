@@ -12,10 +12,10 @@ def dynamic_net(params: Dict):
         model.add(Conv1D(params['feature_size'], params['kernel_size'], dilation_rate=params['dilation_rate'], activation='relu'))
 
     model.add(Flatten())
-    model.add(Dense(256, activation='relu'))
-    model.add(Dropout(params['dropout']))
-    #model.add(Dense(256, activation='relu'))
-    #model.add(Dropout(params['dropout']))
+
+    for i in range(0, params['fc_layer_count']):
+        model.add(Dense(256, activation='relu'))
+        model.add(Dropout(params['dropout']))
 
     model.add(Dense(3, activation='softmax'))
 

@@ -6,6 +6,7 @@ if __name__ == '__main__':
 	custom_genes = [0.0001,  # learning rate
 					2,  # feature_size
 					2,  # conv_layer_count
+					2,  # fc_layer_count
 					2,  # kernel_size
 					1,  # dilation_rate
 					0.1]  # dropout
