@@ -62,7 +62,7 @@ def interpret(genes):
     return labeled_genes
 
 
-def train_test_individual(genes, conf, x_train, y_train, x_test, y_test):
+def train_test_individual(genes, conf, x_train, y_train, x_test, y_test):  # x_test means actual test, not val
 
     labeled_genes = interpret(genes)
     file_path = conf["log_file_path"]

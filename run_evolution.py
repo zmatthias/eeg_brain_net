@@ -127,13 +127,12 @@ if __name__ == '__main__':
                    "test_cut_length": 5000,
                    "aug_multiplier": 3}
 
-    config_train_test = {"train_epochs": 6,
+    config_train_test = {"train_epochs": 3,
                          "train_batch_size": 5,
                          "test_batch_size": 48,
                          "log_file_path": "run_log.txt",
                          "fold_count": 5,
                          "train_verbose": 1}
-
 
     x_train, y_train, x_test, y_test = init_data.init_data(config_data)
 
@@ -145,4 +144,3 @@ if __name__ == '__main__':
         my_children = make_rated_children(besties, my_children_count)
         besties = get_best_individuals(my_children, my_parent_count)
         print(besties[0][-1])
-
