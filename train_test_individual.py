@@ -19,7 +19,7 @@ checkpoint_path = "model.h5"
 
 def train(x_train, y_train, model, conf):
     keras_callbacks = [
-        EarlyStopping(monitor='val_loss', patience=5, mode='min', min_delta=0.0001),
+        EarlyStopping(monitor='val_loss', patience=30, mode='min', min_delta=0.0001),
         ModelCheckpoint(checkpoint_path, monitor='val_loss', save_best_only=True, mode='min')
     ]
     # other validation here than k-fold

@@ -26,8 +26,22 @@ def noise_augment(x_train, amp):
     return x_train
 
 
-def random_cuts_augment(x_train, cut_min_start, cut_max_deviation, cut_length):  # more data_balint with different cuts
-    x_train_aug = np.empty((0, cut_length, 8))
+def swap_channels_augment(x_train):
+    recording_count = x_train.shape[0]
+    recoding_length = x_train.shape[1]
+    channel_count = x_train.shape[2]
+    x_train_aug = np.zeros((recording_count, recoding_length, channel_count))
+
+    for recording in range(recording_count):
+        for channel in range(channel_count):
+            rand_channel = np.random.randint(0, channel_count)
+            x_train_aug[recording][:, channel] = x_train[recording][:, rand_channel]
+    return x_train
+
+
+def random_cuts_augment(x_train, cut_min_start, cut_max_deviation, cut_length):  # more data with different cuts
+    channel_count = x_train.shape[2]
+    x_train_aug = np.empty((0, cut_length, channel_count))
 
     for recording in range(x_train.shape[0]):
         cut_start_deviation = np.random.randint(0, cut_max_deviation)
@@ -46,6 +60,9 @@ def full_augment(x_train, y_train, data_mul):
         aug_x_train = random_cuts_augment(x_train, cut_min_start=0, cut_max_deviation=800, cut_length=5000)
         aug_x_train = mul_sinus_augment(aug_x_train, periods_max=1000, replace=0.5, amp_max=1)
         aug_x_train = noise_augment(aug_x_train, amp=2)
+        aug_x_train = swap_channels_augment(aug_x_train)
+
         all_aug_x_train = np.append(all_aug_x_train, aug_x_train, axis=0)
         all_aug_y_train = np.append(all_aug_y_train, y_train, axis=0)
+
     return all_aug_x_train, all_aug_y_train
