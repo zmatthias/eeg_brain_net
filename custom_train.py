@@ -7,6 +7,7 @@ if __name__ == '__main__':
 					50,  # feature_size
 					5,  # conv_layer_count
 					2,  # fc_layer_count
+					200, #fc_neurons
 					5,  # kernel_size
 					20,  # dilation_rate
 					0.1]  # dropout

@@ -103,16 +103,17 @@ def make_rated_children(parents: np.ndarray, count: int, train_test_config, trai
 
 
 def main():
-    epochs = 2
-    population_size = 10
-    my_gene_count = 7
-    my_parent_count = 3
-    my_children_count = 5
+    epochs = 5
+    population_size = 30
+    my_gene_count = 8
+    my_parent_count = 5
+    my_children_count = 20
 
     my_gene_ranges = np.array([[0.00001, 0.01],  # learning rate
                                 [1, 50],  # feature_size
                                 [1, 6],   # conv_layer_count
-                                [1, 3],   # fc_layer_count
+                                [1, 5],   # fc_layer_count
+                                [10, 2000],  # fc_neurons
                                 [1, 5],   # kernel_size
                                 [1, 20],  # dilation_rate
                                 [0.0, 0.8]])  # dropout
@@ -123,14 +124,14 @@ def main():
                    "train_cut_length": 6000,
                    "test_cut_start": 1000,
                    "test_cut_length": 5000,
-                   "aug_multiplier": 2}
+                   "aug_multiplier": 10}
 
     train_test_config = {"train_epochs": 1000,
                          "train_batch_size": 200,
                          "test_batch_size": 48,
                          "log_file_path": "run_log.txt",
                          "fold_count": 5,
-                         "train_verbose": 1}
+                         "train_verbose": 0}
 
     train_test_data = init_data.init_data(data_config)
 
