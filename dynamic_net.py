@@ -15,7 +15,7 @@ def dynamic_net(params: Dict):
 
     for i in range(0, params['fc_layer_count']):
         model.add(Dense(256, activation='relu'))
-        model.add(Dropout(params['dropout']/params['fc_layer_count']))  # normalize dropout for multiple layers
+        model.add(Dropout(params['dropout']))
 
     model.add(Dense(3, activation='softmax'))
 

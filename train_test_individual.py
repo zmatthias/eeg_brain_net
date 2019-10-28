@@ -64,7 +64,7 @@ def interpret(genes):
     fc_neurons = int(np.maximum(round(genes[4]), 1))
     kernel_size = int(np.maximum(round(genes[5]), 1))
     dilation_rate = int(np.maximum(round(genes[6]), 1))
-    dropout = genes[6]
+    dropout = genes[7]
     labeled_genes = OrderedDict([("lr", lr), ("feature_size", feature_size), ("conv_layer_count", conv_layer_count),
                                  ("fc_layer_count", fc_layer_count), ("fc_neurons", fc_neurons),
                                  ("kernel_size", kernel_size), ("dilation_rate", dilation_rate), ("dropout", dropout)])
