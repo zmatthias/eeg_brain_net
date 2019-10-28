@@ -7,7 +7,7 @@ from typing import Dict
 def dynamic_net(params: Dict):
     model = Sequential()
 
-    model.add(Conv1D(params['feature_size'], params['kernel_size'], activation='relu', input_shape=(5000, 8)))
+    model.add(Conv1D(params['feature_size'], params['kernel_size'], dilation_rate=params['dilation_rate'], activation='relu', input_shape=(5000, 8)))
     for i in range(0, params['conv_layer_count']):
         model.add(Conv1D(params['feature_size'], params['kernel_size'], dilation_rate=params['dilation_rate'], activation='relu'))
 

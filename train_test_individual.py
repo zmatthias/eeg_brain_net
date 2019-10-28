@@ -28,8 +28,11 @@ def train(x_train, y_train, model, conf):
 
 
 def test(x_test, y_test, model, conf):
+    del model
+    model = keras.models.load_model(checkpoint_path)  # load the best checkpoint model instead of the last
     score = model.evaluate(x_test, y_test, batch_size=conf["test_batch_size"])
     score = np.asarray(score)
+    print("k-fold validation score:" + str(score))
     return score
 
 
