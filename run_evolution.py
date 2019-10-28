@@ -110,7 +110,7 @@ def main():
     my_children_count = 20
 
     my_gene_ranges = np.array([[0.00001, 0.01],  # learning rate
-                                [1, 50],  # feature_size
+                                [1, 80],  # feature_size
                                 [1, 6],   # conv_layer_count
                                 [1, 5],   # fc_layer_count
                                 [10, 2000],  # fc_neurons
