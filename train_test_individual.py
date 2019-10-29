@@ -32,7 +32,6 @@ def test(x_test, y_test, model, conf):
     model = keras.models.load_model(checkpoint_path)  # load the best checkpoint model instead of the last
     score = model.evaluate(x_test, y_test, batch_size=conf["test_batch_size"])
     score = np.asarray(score)
-    print("k-fold validation score:" + str(score))
     return score
 
 
@@ -93,8 +92,13 @@ def train_test_individual(genes, conf, data):  # x_test means actual test, not v
         my_dynamic_net = dynamic_net(labeled_genes)
         train(x_train_piece, y_train_piece, my_dynamic_net, conf)
 
-        val_scores_sum += test(x_val_piece, y_val_piece, my_dynamic_net, conf)
-        test_scores_sum += test(data["x_test"], data["y_test"], my_dynamic_net, conf)
+        val_score = test(x_val_piece, y_val_piece, my_dynamic_net, conf)
+        print("k-fold val score:" + str(val_score))
+        val_scores_sum += val_score
+
+        test_score = test(data["x_test"], data["y_test"], my_dynamic_net, conf)
+        print("k-fold test score:" + str(test_score))
+        test_scores_sum += test_score
         del my_dynamic_net
 
     val_score_avg = val_scores_sum / skf.get_n_splits()

@@ -38,8 +38,8 @@ def offset_augment(x_train, amp):
 def scale_augment(x_train, amp):
     for recording in range(x_train.shape[0]):
         for channel in range(x_train.shape[2]):
-            factor = np.random.uniform(0, 2) * amp  #  uniform with mean = 1
-            x_train[recording][:, channel] = x_train[recording][:, channel] * factor
+            factor = np.random.uniform(-1, 1) * amp  # uniform with mean = 0
+            x_train[recording][:, channel] = x_train[recording][:, channel] * (1+max(-1, factor))  # no negative scaling
     return x_train
 
 
