@@ -104,7 +104,7 @@ def make_rated_children(parents: np.ndarray, count: int, train_test_config, trai
 
 def main():
     epochs = 5
-    population_size = 30
+    population_size = 200
     my_gene_count = 8
     my_parent_count = 5
     my_children_count = 20
@@ -115,7 +115,7 @@ def main():
                                 [1, 5],   # fc_layer_count
                                 [10, 2000],  # fc_neurons
                                 [1, 5],   # kernel_size
-                                [1, 20],  # dilation_rate
+                                [1, 100],  # dilation_rate
                                 [0.0, 0.8]])  # dropout
 
     data_config = {"train_data_dir": "data/training_data",
