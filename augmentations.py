@@ -35,6 +35,14 @@ def offset_augment(x_train, amp):
     return x_train
 
 
+def scale_augment(x_train, amp):
+    for recording in range(x_train.shape[0]):
+        for channel in range(x_train.shape[2]):
+            factor = np.random.uniform(0, 2) * amp  #  uniform with mean = 1
+            x_train[recording][:, channel] = x_train[recording][:, channel] * factor
+    return x_train
+
+
 def swap_channels_augment(x_train):
     recording_count = x_train.shape[0]
     recoding_length = x_train.shape[1]
@@ -67,11 +75,11 @@ def full_augment(x_train, y_train, data_mul):
 
     for j in range(0, data_mul):
         aug_x_train = random_cuts_augment(x_train, cut_min_start=0, cut_max_deviation=800, cut_length=5000)
-        #aug_x_train = mul_sinus_augment(aug_x_train, periods_max=1000, replace=0.5, amp_max=1)
-        #aug_x_train = noise_augment(aug_x_train, amp=2)
-        #aug_x_train = swap_channels_augment(aug_x_train)
-
+        aug_x_train = mul_sinus_augment(aug_x_train, periods_max=1000, replace=0.5, amp_max=1)
+        aug_x_train = noise_augment(aug_x_train, amp=1)
+        aug_x_train = swap_channels_augment(aug_x_train)
         aug_x_train = offset_augment(aug_x_train, amp=1)
+        aug_x_train = scale_augment(aug_x_train, amp=1)
 
         all_aug_x_train = np.append(all_aug_x_train, aug_x_train, axis=0)
         all_aug_y_train = np.append(all_aug_y_train, y_train, axis=0)
