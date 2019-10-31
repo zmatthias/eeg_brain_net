@@ -10,28 +10,25 @@ from sklearn.model_selection import StratifiedKFold
 from collections import OrderedDict
 
 
-tf_config = tf.ConfigProto()
-tf_config.gpu_options.allow_growth = True
-tf.Session(config=tf_config)
 np.random.seed(0)
 checkpoint_path = "model.h5"
-
+gc.enable()
 
 def train(x_train, y_train, model, conf):
     keras_callbacks = [
-        EarlyStopping(monitor='val_loss', patience=30, mode='min', min_delta=0.0001),
-        ModelCheckpoint(checkpoint_path, monitor='val_loss', save_best_only=True, mode='min')
+        EarlyStopping(monitor='val_loss', patience=5, mode='min', min_delta=0.0001),
+        ModelCheckpoint(conf["checkpoint_path"], monitor='val_loss', save_best_only=True, mode='min')
     ]
     # other validation here than k-fold
     model.fit(x_train, y_train, shuffle=True, epochs=conf["train_epochs"], batch_size=conf["train_batch_size"],
               verbose=conf["train_verbose"], validation_split=0.2, callbacks=keras_callbacks)
 
 
-def test(x_test, y_test, model, conf):
-    del model
-    model = keras.models.load_model(checkpoint_path)  # load the best checkpoint model instead of the last
+def test(x_test, y_test, conf):
+    model = keras.models.load_model(conf["checkpoint_path"])  # load the best checkpoint model instead of the last
     score = model.evaluate(x_test, y_test, batch_size=conf["test_batch_size"])
     score = np.asarray(score)
+    del model
     return score
 
 
@@ -92,11 +89,11 @@ def train_test_individual(genes, conf, data):  # x_test means actual test, not v
         my_dynamic_net = dynamic_net(labeled_genes)
         train(x_train_piece, y_train_piece, my_dynamic_net, conf)
 
-        val_score = test(x_val_piece, y_val_piece, my_dynamic_net, conf)
+        val_score = test(x_val_piece, y_val_piece, conf)
         print("k-fold val score:" + str(val_score))
         val_scores_sum += val_score
 
-        test_score = test(data["x_test"], data["y_test"], my_dynamic_net, conf)
+        test_score = test(data["x_test"], data["y_test"], conf)
         print("k-fold test score:" + str(test_score))
         test_scores_sum += test_score
         del my_dynamic_net
@@ -109,7 +106,6 @@ def train_test_individual(genes, conf, data):  # x_test means actual test, not v
     
     write_log_metrics(conf["log_file_path"], str(val_score_avg), str(test_score_avg))
     keras.backend.clear_session()
-    gc.collect()
     val_loss_avg = val_score_avg[0]
 
     return val_loss_avg

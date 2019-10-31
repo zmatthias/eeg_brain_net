@@ -124,12 +124,13 @@ def main():
                    "train_cut_length": 6000,
                    "test_cut_start": 1000,
                    "test_cut_length": 5000,
-                   "aug_multiplier": 10}
+                   "aug_multiplier": 1}
 
-    train_test_config = {"train_epochs": 1000,
-                         "train_batch_size": 200,
+    train_test_config = {"train_epochs": 1,
+                         "train_batch_size": 20,
                          "test_batch_size": 48,
                          "log_file_path": "run_log.txt",
+                         "checkpoint_path": "model.h5",
                          "fold_count": 5,
                          "train_verbose": 0}
 

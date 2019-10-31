@@ -22,10 +22,12 @@ def main():
 
 	train_test_config = {"train_epochs": 10,
 						 "train_batch_size": 5,
-						 "test_batch_size": 48,
+						 "test_batch_size": 1,
 						 "log_file_path": "run_log.txt",
+						 "checkpoint_path": "model.h5",
 						 "fold_count": 2,
-						 "train_verbose": 1}
+						 "train_verbose": 1,
+						 }
 
 	train_test_data = init_data.init_data(data_config)
 	train_test_individual.train_test_individual(custom_genes, train_test_config, train_test_data)
