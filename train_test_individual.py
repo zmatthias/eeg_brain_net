@@ -1,6 +1,5 @@
 import numpy as np
 
-import sklearn.preprocessing
 import keras
 import gc
 from keras.callbacks import EarlyStopping, ModelCheckpoint
@@ -8,27 +7,73 @@ import tensorflow as tf
 from dynamic_net import dynamic_net
 from sklearn.model_selection import StratifiedKFold
 from collections import OrderedDict
+import psutil
+import humanize
+import os
+import GPUtil as GPU
 
+from keras.backend.tensorflow_backend import set_session
+from keras.backend.tensorflow_backend import clear_session
+from keras.backend.tensorflow_backend import get_session
+import tensorflow
 
 np.random.seed(0)
 checkpoint_path = "model.h5"
-gc.enable()
+
+
+def reset_keras():
+    sess = get_session()
+    clear_session()
+    sess.close()
+    sess = get_session()
+    print(gc.collect())  # if it's done something you should see a number being outputted
+
+    # use the same config as you used to create the session
+    config = tensorflow.compat.v1.ConfigProto()
+    try:
+        config.gpu_options.per_process_gpu_memory_fraction = 1
+        config.gpu_options.visible_device_list = "0"
+    except:
+        print("GPU settings failed, no GPU?")
+
+    set_session(tensorflow.compat.v1.Session(config=config))
+
+
+def print_mem():
+    process = psutil.Process(os.getpid())
+    print("Gen RAM Free: " + humanize.naturalsize(psutil.virtual_memory().available),
+          " | Proc size: " + humanize.naturalsize(process.memory_info().rss))
+    try:
+        gpu = GPU.getGPUs()[0]
+
+        print("GPU RAM Free: {0:.0f}MB | Used: {1:.0f}MB | Util {2:3.0f}% | Total {3:.0f}MB".format(gpu.memoryFree,
+                                                                                                    gpu.memoryUsed,
+                                                                                                    gpu.memoryUtil * 100,
+                                                                                                    gpu.memoryTotal))
+    except:
+        print("no GPU!")
+
 
 def train(x_train, y_train, model, conf):
     keras_callbacks = [
-        EarlyStopping(monitor='val_loss', patience=5, mode='min', min_delta=0.0001),
-        ModelCheckpoint(conf["checkpoint_path"], monitor='val_loss', save_best_only=True, mode='min')
+        EarlyStopping(monitor='val_loss', patience=conf["patience"], mode='min', min_delta=0.0001),
+        # ModelCheckpoint(conf["checkpoint_path"], monitor='val_loss', save_best_only=True, mode='min')
     ]
     # other validation here than k-fold
     model.fit(x_train, y_train, shuffle=True, epochs=conf["train_epochs"], batch_size=conf["train_batch_size"],
               verbose=conf["train_verbose"], validation_split=0.2, callbacks=keras_callbacks)
 
 
-def test(x_test, y_test, conf):
-    model = keras.models.load_model(conf["checkpoint_path"])  # load the best checkpoint model instead of the last
+def test(x_test, y_test, model, conf):
+    print("Memory before Test")
+    print_mem()
+    # model = keras.models.load_model(conf["checkpoint_path"])  # load the best checkpoint model instead of the last
     score = model.evaluate(x_test, y_test, batch_size=conf["test_batch_size"])
     score = np.asarray(score)
     del model
+    print("Memory after Test")
+    print_mem()
+
     return score
 
 
@@ -46,13 +91,6 @@ def write_log_metrics(file_path, val_scores, test_scores):
     file_stream.write("\nTest Loss, Acc: ")
     file_stream.write(test_scores)
     file_stream.close()
-
-
-def reset_weights(model):
-    my_session = tf.compat.v1.keras.backend.get_session()
-    for layer in model.layers:
-        if hasattr(layer, 'kernel_initializer'):
-            layer.kernel.initializer.run(session=my_session)
 
 
 def interpret(genes):
@@ -81,7 +119,8 @@ def train_test_individual(genes, conf, data):  # x_test means actual test, not v
     skf = StratifiedKFold(n_splits=conf["fold_count"], shuffle=True, random_state=42)
     val_scores_sum, test_scores_sum = np.zeros(2), np.zeros(2)
 
-    for train_index, val_index in skf.split(data["x_train"], data["y_train"].argmax(1)):  # convert one-hot to integer values to split
+    for train_index, val_index in skf.split(data["x_train"],
+                                            data["y_train"].argmax(1)):  # convert one-hot to integer values to split
         # print("TRAIN SET:", train_index, "VAL SET:", val_index)
         x_train_piece, x_val_piece = data["x_train"][train_index], data["x_train"][val_index]
         y_train_piece, y_val_piece = data["y_train"][train_index], data["y_train"][val_index]
@@ -89,21 +128,32 @@ def train_test_individual(genes, conf, data):  # x_test means actual test, not v
         my_dynamic_net = dynamic_net(labeled_genes)
         train(x_train_piece, y_train_piece, my_dynamic_net, conf)
 
-        val_score = test(x_val_piece, y_val_piece, conf)
+        val_score = test(x_val_piece, y_val_piece, my_dynamic_net, conf)
         print("k-fold val score:" + str(val_score))
-        val_scores_sum += val_score
 
-        test_score = test(data["x_test"], data["y_test"], conf)
-        print("k-fold test score:" + str(test_score))
-        test_scores_sum += test_score
-        del my_dynamic_net
+        if val_score[0] > conf["first_val_loss_max"]:  # if val score is too bad, don't even bother
+
+            val_scores_sum = np.array([99.0, 0.0])
+            test_scores_sum = np.array([99.0, 0.0])
+            break
+
+        else:
+            val_scores_sum += val_score
+
+            test_score = test(data["x_test"], data["y_test"], my_dynamic_net, conf)
+            print("k-fold test score:" + str(test_score))
+            test_scores_sum += test_score
+            del my_dynamic_net
+            print("try Reset")
+            reset_keras()
+            gc.collect()
 
     val_score_avg = val_scores_sum / skf.get_n_splits()
     test_score_avg = test_scores_sum / skf.get_n_splits()
 
     print("Validation Loss, Acc: " + str(val_score_avg))
     print("Test Loss, Acc: " + str(test_score_avg))
-    
+
     write_log_metrics(conf["log_file_path"], str(val_score_avg), str(test_score_avg))
     keras.backend.clear_session()
     val_loss_avg = val_score_avg[0]

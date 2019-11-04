@@ -26,6 +26,8 @@ def main():
 						 "log_file_path": "run_log.txt",
 						 "checkpoint_path": "model.h5",
 						 "fold_count": 2,
+						 "first_val_loss_max": 2,
+						 "patience": 5,
 						 "train_verbose": 1,
 						 }
 
