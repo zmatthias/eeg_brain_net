@@ -14,7 +14,7 @@ def dynamic_net(params: Dict):
     model.add(Flatten())
 
     for i in range(0, params['fc_layer_count']):
-        model.add(Dense(256, activation='relu'))
+        model.add(Dense(params['fc_neurons'], activation='relu'))
         model.add(Dropout(params['dropout']))
 
     model.add(Dense(3, activation='softmax'))
