@@ -1,5 +1,5 @@
 import numpy as np
-
+import time
 import keras
 import gc
 from keras.callbacks import EarlyStopping, ModelCheckpoint
@@ -60,9 +60,12 @@ def train(x_train, y_train, model, conf):
         # ModelCheckpoint(conf["checkpoint_path"], monitor='val_loss', save_best_only=True, mode='min')
     ]
     # other validation here than k-fold
+    start = time.time()
     model.fit(x_train, y_train, shuffle=True, epochs=conf["train_epochs"], batch_size=conf["train_batch_size"],
               verbose=conf["train_verbose"], validation_split=0.2, callbacks=keras_callbacks)
 
+    end = time.time()
+    print("(Partial) Training took:" + str(end - start) + "s")
 
 def test(x_test, y_test, model, conf):
     print("Memory before Test")
