@@ -1,8 +1,24 @@
 import numpy as np
+import time
+
 import train_test_individual
 import init_data
 # rated individual: [gene_a, gene_b,..., classification loss]
 # rated population: [rated individual 0, rated individual 1, ..]
+
+
+def check_timeout(evo_conf) -> bool:
+    now_time = time.time()
+    if now_time - evo_conf["start_time"] > evo_conf["timeout_secs"]:
+        return True
+    else:
+        return False
+
+
+def end_if_timeout(evo_conf):
+    if check_timeout(evo_conf):
+        print("\n\n====== TIMEOUT AFTER " + str(evo_conf["timeout_secs"]) + "s ==========")
+        exit()
 
 
 def mock_rate_loss(individual) -> float:
@@ -16,13 +32,12 @@ def mock_rate_loss(individual) -> float:
 
 def add_loss(unrated_individual: np.ndarray, train_test_config, train_test_data) -> np.ndarray:
     loss = train_test_individual.train_test_individual(unrated_individual, train_test_config, train_test_data)
-    #loss = mock_rate_loss(unrated_individual)
     rated_individual = np.concatenate((unrated_individual, loss), axis=None)
     return rated_individual
 
 
 def create_rated_individual(train_test_data, train_test_config, evo_conf) -> np.ndarray:
-
+    end_if_timeout(evo_conf)
     individual = np.empty(evo_conf["gene_count"])
     for i in range(0, evo_conf["gene_count"]):
         individual[i] = np.random.uniform(evo_conf["gene_ranges"][i][0], evo_conf["gene_ranges"][i][1])
@@ -119,7 +134,8 @@ def main():
                 "parent_count": 2,
                 "children_count": 5,
                 "gene_ranges": my_gene_ranges,
-                "timeout_secs": 200}
+                "timeout_secs": 20,
+                "start_time": 0}
 
     data_conf = {"train_data_dir": "data/training_data",
                  "test_data_dir": "data/test_data",
@@ -140,7 +156,7 @@ def main():
                        "train_verbose": 0}
 
 
-    #start_time = time.time()
+    evo_conf["start_time"] = time.time()
     train_test_data = init_data.init_data(data_conf)
 
     my_initial_population = create_rated_population(train_test_data, train_test_conf,  evo_conf)
@@ -148,7 +164,7 @@ def main():
     best_individuals = get_best_individuals(my_initial_population, evo_conf)
 
     for e in range(evo_conf["epochs"]):
-        print("====== Evolution Epoch: " + str(e) + "==============")
+        print("\n\n====== Evolution Epoch: " + str(e) + "==============")
         my_children = make_rated_children(best_individuals, train_test_data, train_test_conf, evo_conf)
         best_individuals = get_best_individuals(my_children, evo_conf)
         print(best_individuals[0][-1])
