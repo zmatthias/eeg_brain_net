@@ -67,6 +67,7 @@ def train(x_train, y_train, model, conf):
     end = time.time()
     print("(Partial) Training took:" + str(end - start) + "s")
 
+
 def test(x_test, y_test, model, conf):
     print("Memory before Test")
     print_mem()

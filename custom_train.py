@@ -15,7 +15,7 @@ def main():
 	data_config = {"train_data_dir": "data/test_data",
 					"test_data_dir": "data/test_data",
 					"train_cut_start": 0,
-					"train_cut_length": 6000,
+					"train_cut_length": 6000, # not used!
 					"test_cut_start": 1000,
 					"test_cut_length": 5000,
 					"aug_multiplier": 2}
