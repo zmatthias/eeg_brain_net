@@ -1,10 +1,29 @@
 import numpy as np
 import time
+import sys
+import psutil
+import humanize
+import os
+import GPUtil as GPU
+
 
 import train_test_individual
 import init_data
 # rated individual: [gene_a, gene_b,..., classification loss]
 # rated population: [rated individual 0, rated individual 1, ..]
+
+
+def batch_size_incr_possible(conf):
+    try:
+        gpu = GPU.getGPUs()[0]
+        if gpu.memoryFree > conf["min_free_gpu_memory"]:
+            return True
+        else:
+            return False
+
+    except:
+        print("no GPU!")
+        return False
 
 
 def check_timeout(evo_conf) -> bool:
@@ -18,7 +37,7 @@ def check_timeout(evo_conf) -> bool:
 def end_if_timeout(evo_conf):
     if check_timeout(evo_conf):
         print("\n\n====== TIMEOUT AFTER " + str(evo_conf["timeout_secs"]) + "s ==========")
-        exit()
+        sys.exit()
 
 
 def mock_rate_loss(individual) -> float:
@@ -30,7 +49,7 @@ def mock_rate_loss(individual) -> float:
     return unfitness
 
 
-def add_loss(unrated_individual: np.ndarray, train_test_config, train_test_data) -> np.ndarray:
+def add_loss(unrated_individual: np.ndarray, train_test_data, train_test_config) -> np.ndarray:
     loss = train_test_individual.train_test_individual(unrated_individual, train_test_config, train_test_data)
     rated_individual = np.concatenate((unrated_individual, loss), axis=None)
     return rated_individual
@@ -42,7 +61,7 @@ def create_rated_individual(train_test_data, train_test_config, evo_conf) -> np.
     for i in range(0, evo_conf["gene_count"]):
         individual[i] = np.random.uniform(evo_conf["gene_ranges"][i][0], evo_conf["gene_ranges"][i][1])
 
-    rated_individual = add_loss(individual, train_test_config, train_test_data)
+    rated_individual = add_loss(individual, train_test_data, train_test_config)
     return rated_individual
 
 
@@ -117,13 +136,49 @@ def make_rated_children(parents: np.ndarray, train_test_data, train_test_config,
     return children
 
 
+def batch_size_stress_test(train_test_data, evo_conf):
+    gene_ranges = evo_conf["gene_ranges"]
+    individual = np.empty(evo_conf["gene_count"])
+
+    for gene in range(0, evo_conf["gene_count"]):
+        max_gene = gene_ranges[gene][-1]
+        individual[gene] = max_gene
+
+    train_test_conf_stress = {"train_epochs": 1,
+                              "batch_size": 1,
+                              "batch_size_max": 200,
+                              "min_free_gpu_memory": 2000,
+                              "log_file_path": "stress_run_log.txt",
+                              "checkpoint_path": "stress_model.h5",
+                              "fold_count": 2,
+                              "first_val_loss_max": 2,
+                              "patience": 0,
+                              "train_verbose": 0}
+
+    runs = int(np.log2(train_test_conf_stress["batch_size_max"]) + 1)
+    for i in range(0, runs):
+        add_loss(individual, train_test_data, train_test_conf_stress)
+        if batch_size_incr_possible(train_test_conf_stress):
+            print("Enough GPU mem, increasing batch size")
+            train_test_conf_stress["batch_size"] = min(int(train_test_conf_stress["batch_size"] * 2),
+                                                       train_test_conf_stress["batch_size_max"])
+            print("Batch Size Now:" + str(train_test_conf_stress["batch_size"]))
+
+        else:
+            print("No Batch Size increase possible, trying to step back one notch for safety")
+            train_test_conf_stress["batch_size"] = max(int(train_test_conf_stress["batch_size"] / 2), 1)
+            print("Batch Size Now:" + str(train_test_conf_stress["batch_size"]))
+            break
+
+    return train_test_conf_stress["batch_size"]
+
 def main():
 
-    my_gene_ranges = np.array([[0.00001, 0.01],  # learning rate
-                               [1, 1],  # feature_size
-                               [1, 1],   # conv_layer_count
-                               [1, 1],   # fc_layer_count
-                               [10, 10],  # fc_neurons
+    my_gene_ranges = np.array([[0.00001, 0.001],  # learning rate
+                               [1, 10],  # feature_size
+                               [1, 5],   # conv_layer_count
+                               [1, 3],   # fc_layer_count
+                               [1, 10],  # fc_neurons
                                [1, 2],   # kernel_size
                                [1, 100],  # dilation_rate
                                [0.0, 0.8]])  # dropout
@@ -134,7 +189,7 @@ def main():
                 "parent_count": 2,
                 "children_count": 5,
                 "gene_ranges": my_gene_ranges,
-                "timeout_secs": 20,
+                "timeout_secs": 28800,
                 "start_time": 0}
 
     data_conf = {"train_data_dir": "data/training_data",
@@ -146,8 +201,7 @@ def main():
                  "aug_multiplier": 1}
 
     train_test_conf = {"train_epochs": 1,
-                       "train_batch_size": 20,
-                       "test_batch_size": 48,
+                       "batch_size": 1,
                        "log_file_path": "run_log.txt",
                        "checkpoint_path": "model.h5",
                        "fold_count": 2,
@@ -155,11 +209,13 @@ def main():
                        "patience": 5,
                        "train_verbose": 0}
 
-
     evo_conf["start_time"] = time.time()
     train_test_data = init_data.init_data(data_conf)
 
-    my_initial_population = create_rated_population(train_test_data, train_test_conf,  evo_conf)
+    train_test_conf["batch_size"] = batch_size_stress_test(train_test_data, evo_conf)
+    print("Batch size determined by the stress test: " + str(train_test_conf["batch_size"] ))
+
+    my_initial_population = create_rated_population(train_test_data, train_test_conf, evo_conf)
 
     best_individuals = get_best_individuals(my_initial_population, evo_conf)
 

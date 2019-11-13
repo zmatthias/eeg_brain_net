@@ -18,7 +18,6 @@ from keras.backend.tensorflow_backend import get_session
 import tensorflow
 
 np.random.seed(0)
-checkpoint_path = "model.h5"
 
 
 def reset_keras():
@@ -55,13 +54,14 @@ def print_mem():
 
 
 def train(x_train, y_train, model, conf):
+
     keras_callbacks = [
         EarlyStopping(monitor='val_loss', patience=conf["patience"], mode='min', min_delta=0.0001),
         # ModelCheckpoint(conf["checkpoint_path"], monitor='val_loss', save_best_only=True, mode='min')
     ]
     # other validation here than k-fold
     start = time.time()
-    model.fit(x_train, y_train, shuffle=True, epochs=conf["train_epochs"], batch_size=conf["train_batch_size"],
+    model.fit(x_train, y_train, shuffle=True, epochs=conf["train_epochs"], batch_size=conf["batch_size"],
               verbose=conf["train_verbose"], validation_split=0.2, callbacks=keras_callbacks)
 
     end = time.time()
@@ -72,7 +72,7 @@ def test(x_test, y_test, model, conf):
     print("Memory before Test")
     print_mem()
     # model = keras.models.load_model(conf["checkpoint_path"])  # load the best checkpoint model instead of the last
-    score = model.evaluate(x_test, y_test, batch_size=conf["test_batch_size"])
+    score = model.evaluate(x_test, y_test, batch_size=conf["batch_size"])
     score = np.asarray(score)
     del model
     print("Memory after Test")
