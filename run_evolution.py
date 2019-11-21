@@ -6,11 +6,15 @@ import humanize
 import os
 import GPUtil as GPU
 
-
 import train_test_individual
 import init_data
 # rated individual: [gene_a, gene_b,..., classification loss]
 # rated population: [rated individual 0, rated individual 1, ..]
+
+
+def random_gen(count: int) -> np.ndarray:
+    random_numbers = np.random.rand(count)
+    return random_numbers
 
 
 def batch_size_incr_possible(conf):
@@ -90,16 +94,6 @@ def get_best_individuals(rated_population: np.ndarray, evo_conf) -> np.ndarray:
     return best_individuals
 
 
-# combines the same trait from multiple parents
-def combine_genes_avg(genes: np.ndarray) -> int:
-    gene_result = 0
-    genes = genes.flatten()
-    parent_count = len(genes)  # each gene is from a different parent
-    for gene in genes:
-        gene_result += gene / parent_count
-    return gene_result
-
-
 def mutate(gene: float, chance: float) -> float:
     if np.random.rand() < chance:
         gene = gene * np.random.rand()
@@ -107,18 +101,12 @@ def mutate(gene: float, chance: float) -> float:
 
 
 # combines the same trait from multiple parents
-def combine_genes_rand_weight(genes: np.ndarray) -> float:
-    gene_result = 0
+def combine_genes_rand_weight(genes: np.ndarray, rng) -> float:
     genes = genes.flatten()
     parent_count = len(genes)
-
-    weights = np.random.rand(parent_count)
+    weights = rng(parent_count)
     normalized_weights = weights / np.sum(weights)
-
-    for index, gene in enumerate(genes):
-        gene_result += gene * normalized_weights[index]
-
-    gene_result = mutate(gene_result, 0.1)
+    gene_result = float(np.dot(normalized_weights, genes))
     return gene_result
 
 
@@ -128,7 +116,7 @@ def make_rated_children(parents: np.ndarray, train_test_data, train_test_config,
 
     for ch in range(evo_conf["parent_count"]):
         for gene in range(evo_conf["gene_count"]):
-            child[gene] = combine_genes_rand_weight(parents[:, [gene]])
+            child[gene] = combine_genes_rand_weight(parents[:, [gene]], random_gen)
 
         rated_child = add_loss(child, train_test_config, train_test_data)
         children = np.vstack([children, rated_child])
@@ -175,15 +163,25 @@ def batch_size_stress_test(train_test_data, evo_conf):
 def main():
 
     my_gene_ranges = np.array([[0.00001, 0.001],  # learning rate
-                               [1, 10],  # feature_size
-                               [1, 5],   # conv_layer_count
+                               [1, 1],  # feature_size
+                               [1, 2],   # conv_layer_count
                                [1, 3],   # fc_layer_count
                                [1, 10],  # fc_neurons
                                [1, 2],   # kernel_size
-                               [1, 100],  # dilation_rate
+                               [1, 1],  # dilation_rate
                                [0.0, 0.8]])  # dropout
 
-    evo_conf = {"epochs": 5,
+    my_gene_ranges_dict = {"learning_rate": [0.00001, 0.001],
+                           "feature_size": [1, 1],
+                           "conv_layer_count": [1, 2],
+                           "fc_layer_count":  [1, 3],
+                           "fc_neurons": [1, 10],
+                           "kernel_size": [1, 2],
+                           "dilation_rate": [1, 2],
+                           "dropout": [0.0, 0.8]
+                           }
+
+    evo_conf = {"epochs": 50,
                 "population_size": 200,
                 "gene_count": 8,
                 "parent_count": 2,
